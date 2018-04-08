@@ -71,13 +71,13 @@ export const constantRouterMap = [
             path: '',
             name: 'entity.home',
             hidden: true,
-            component: () => import('@/views/graph/index')
+            component: () => import('@/views/edit/entity/home')
           },
           {
             path: ':id',
             name: 'entity.item',
             hidden: true,
-            component: () => import('@/views/home/index')
+            component: () => import('@/views/edit/entity/item')
           }
         ]
       }, {

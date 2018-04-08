@@ -13,7 +13,6 @@
   export default {
     methods: {
       editEntity(id) {
-        // 路由跳转
         this.$router.push({name: 'entity.item', params: {id}})
       }
     },
