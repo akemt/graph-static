@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-container">
+    <p>放一些统计信息</p>
     <div class="dashboard-text">name:{{name}}</div>
     <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>
   </div>
@@ -9,7 +10,7 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    name: 'dashboard',
+    name: 'HOME',
     computed: {
       ...mapGetters([
         'name',
