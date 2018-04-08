@@ -37,7 +37,7 @@ export const constantRouterMap = [
     // hidden: true,
     children: [
       {
-        path: 'home',
+        path: '',
         name: 'home',
         component: () => import('@/views/home/index'),
         meta: {title: '首页', icon: 'table'}
@@ -50,7 +50,7 @@ export const constantRouterMap = [
         path: 'graph',
         name: 'graph',
         component: () => import('@/views/graph/index'),
-        meta: {title: '图谱', icon: 'form'}
+        meta: {title: '图谱', icon: 'example'}
       }
     ]
   }, {
@@ -58,18 +58,33 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/edit/entity',
     name: 'edit',
-    meta: {title: '编辑', icon: 'example'},
+    meta: {title: '编辑', icon: 'form'},
     children: [
       {
         path: 'entity',
         name: 'entity',
-        component: () => import('@/views/edit/entity'),
-        meta: {title: '实体', icon: 'table'}
+        component: () => import('@/views/edit/entity/index'),
+        meta: {title: '实体', icon: 'form'},
+        normal: true,
+        children: [
+          {
+            path: '',
+            name: 'entity.home',
+            hidden: true,
+            component: () => import('@/views/graph/index')
+          },
+          {
+            path: ':id',
+            name: 'entity.item',
+            hidden: true,
+            component: () => import('@/views/home/index')
+          }
+        ]
       }, {
         path: 'model',
         name: 'model',
-        component: () => import('@/views/edit/model'),
-        meta: {title: '模型', icon: 'table'}
+        component: () => import('@/views/edit/model/index'),
+        meta: {title: '模型', icon: 'form'}
       }
     ]
   },
