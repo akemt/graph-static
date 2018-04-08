@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     {{this.$route.params}}
-    <tree></tree>
-    <relation></relation>
+    <entity-tree></entity-tree>
+    <entity-relation></entity-relation>
   </div>
 </template>
 
 <script>
-  import tree from '@/components/entity/tree'
-  import relation from '@/components/entity/relation'
+  import entityTree from '@/components/entity/entityTree'
+  import entityRelation from '@/components/entity/entityRelation'
 
   export default {
-    components: {tree, relation}
+    components: {entityTree, entityRelation}
   }
 </script>
 

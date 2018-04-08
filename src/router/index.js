@@ -56,12 +56,12 @@ export const constantRouterMap = [
   }, {
     path: '/edit',
     component: Layout,
-    redirect: '/edit/entity',
+    // redirect: '/edit/entity',
     name: 'edit',
     meta: {title: '编辑', icon: 'form'},
     children: [
       {
-        path: 'entity',
+        path: '/edit/entity',
         name: 'entity',
         component: () => import('@/views/edit/entity/index'),
         meta: {title: '实体', icon: 'form'},
@@ -70,16 +70,14 @@ export const constantRouterMap = [
           {
             path: '',
             name: 'entity.home',
-            hidden: true,
+            // hidden: true,
             component: () => import('@/views/edit/entity/home')
-          },
-          {
-            path: ':id',
+          }, {
+            path: 'edit/entity/:id',
             name: 'entity.item',
             hidden: true,
             component: () => import('@/views/edit/entity/item')
-          }
-        ]
+          }]
       }, {
         path: 'model',
         name: 'model',
