@@ -76,12 +76,12 @@ function createAPI(baseURL) {
       data: conf.data,
       transformRequest: [
         function(data) {
-          let ret = ''
+          const retArr = []
           for (const it in data) {
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) +
-              '&'
+            retArr.push(encodeURIComponent(it) + '=' +
+              encodeURIComponent(data[it]))
           }
-          return ret
+          return retArr.join('&')
         }]
     }, conf.opts)
     return instance(option)
