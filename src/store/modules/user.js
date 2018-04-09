@@ -30,10 +30,11 @@ const user = {
     // 登录
     Login({commit}, userInfo) {
       const username = userInfo.username.trim()
+      const password = userInfo.password.trim()
       return new Promise((resolve, reject) => {
         api.user_login_post({
           username: username,
-          password: userInfo
+          password: password
         }).then(response => {
           const data = response.data
           setToken(data.token)

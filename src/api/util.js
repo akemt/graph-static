@@ -64,11 +64,28 @@ instance.interceptors.response.use(
 function createAPI(baseURL) {
   return function(conf) {
     conf = conf || {}
-    return instance(Object.assign({}, {
+    conf.data = {}
+    if (conf.method === 'post') {
+      conf.data = conf.opts
+    }
+    const option = Object.assign({}, {
       url: conf.url,
       baseURL: baseURL,
-      method: conf.method
-    }, conf.opts))
+      method: conf.method,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      data: conf.data,
+      transformRequest: [
+        function(data) {
+          let ret = ''
+          for (const it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) +
+              '&'
+          }
+          return ret
+        }]
+    }, conf.opts)
+    debugger
+    return instance(option)
   }
 }
 
