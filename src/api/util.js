@@ -84,7 +84,6 @@ function createAPI(baseURL) {
           return ret
         }]
     }, conf.opts)
-    debugger
     return instance(option)
   }
 }
