@@ -21,8 +21,8 @@
       }
     },
     methods: {
-      editEntity(id) {
-        this.$router.push({name: 'entity.item', params: {id}})
+      editEntity(item) {
+        this.$router.push({name: 'entity.item', params: {id: item.id}})
       }
     },
     components: {search}

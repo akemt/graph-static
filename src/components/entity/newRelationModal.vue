@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="提示" :visible.sync="open" :close-on-click-modal="true" center>
+  <el-dialog title="提示" :visible.sync="open" :close-on-click-modal="false" center>
     <!--* 新建关系按钮，和表格-->
     <!--* 表格分为三列-->
     <el-row>
@@ -8,14 +8,15 @@
       </el-col>
       <el-col :span="14" :push="2">
         <el-form :model="createRelationForm" :rules="createRelationRules" ref="createRelationForm">
-          <h3 class="title">实体：{{item.id}}</h3>
-          <el-form-item prop="type">
-            <span class="svg-container svg-container_login">关系</span>
-            <el-input name="type" type="text" v-model="createRelationForm.type" :disabled="true" placeholder="请输入内容"/>
+          <h3 class="title" style="display: none">实体：{{item.id}}</h3>
+          <el-form-item prop="ename">
+            <span class="svg-container svg-container_login">实体</span>
+            <el-input name="ename" type="text" v-model="createRelationForm.ename" :disabled="true"
+                      placeholder="请选择实体名称"/>
           </el-form-item>
-          <el-form-item prop="action">
-            <span class="svg-container svg-container_login">动作</span>
-            <el-input name="action" type="text" v-model="createRelationForm.action" placeholder="请输入内容"/>
+          <el-form-item prop="relation">
+            <span class="svg-container svg-container_login">关系</span>
+            <el-input name="relation" type="text" v-model="createRelationForm.relation" placeholder="请输入关系"/>
           </el-form-item>
         </el-form>
 
@@ -42,57 +43,43 @@
     data() {
       const validateType = (rule, value, callback) => {
         if (!isvalidUsername(value)) {
-          callback(new Error('请输入正确的用户名'))
+          callback(new Error('输入不能为空'))
         } else {
           callback()
         }
       }
       return {
         createRelationForm: {
-          type: '',
-          action: ''
+          relation: '',
+          rid: this.item.id,
+          eid: '',
+          ename: ''
         },
         createRelationRules: {
-          type: [{required: true, trigger: 'blur', validator: validateType}],
-          action: [{required: true, trigger: 'blur', validator: validateType}]
+          ename: [{required: true, trigger: 'blur', validator: validateType}],
+          relation: [{required: true, trigger: 'blur', validator: validateType}]
         }
       }
     },
     methods: {
-      editEntity(id) {
-        console.log('edit', id)
-        this.createRelationForm.type = id
+      editEntity(item) {
+        this.createRelationForm.ename = item.name
+        this.createRelationForm.eid = item.id
       },
       ok() {
         this.$refs.createRelationForm.validate(valid => {
           if (valid) {
-            // this.loading = true
-            const newEntity = {
-              name: this.item.name,
-              type: this.createRelationForm.type,
-              action: this.createRelationForm.action
-            }
-            this.$emit('newEntiry', newEntity)
-            api.entitys_post(newEntity).then((data) => {
-              console.log('创建成功', data)
+            api.entitys_post({id: this.item.id, json: JSON.stringify(this.createRelationForm)}).then((data) => {
+              // 提示
+              this.$message('创建关系成功')
+              this.close()
             })
-            this.close()
           } else {
-            console.log('error submit!!')
+            // 提示
+            this.$message('输入不能为空')
             return false
           }
         })
-        // do something
-        // const newEntity = {
-        //   name: this.item.name,
-        //   type: this.type,
-        //   action: this.action
-        // }
-        // this.$emit('newEntiry', newEntity)
-        // api.entitys_post(newEntity).then((data) => {
-        //   console.log('创建成功', data)
-        // })
-        // this.close()
       },
       close() {
         this.$emit('close')

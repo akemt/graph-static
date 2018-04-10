@@ -1,20 +1,21 @@
 <template>
   <div class="app-container">
-    <new-relation-modal :open.sync="showDialog" @close="closeModel()" :item="item" @newEntiry="test"></new-relation-modal>
+    <new-relation-modal :open.sync="showDialog" @close="closeModel()" :item="item"></new-relation-modal>
     <!--<button @click="showDialog = true">新建关系</button>-->
-    <div><p class="entity-relation-p">实体：{{item.id}}</p>
+    <div>
+      <!--<p class="entity-relation-p">实体：{{item.id}}</p>-->
       <el-button type="primary" plain @click="showDialog = true" class="entity-relation-float">新建关系</el-button>
     </div>
     <el-table
       :data="dataList"
       style="width: 100%">
       <el-table-column
-        prop="name"
+        prop="ename"
         label="实体"
         width="440">
       </el-table-column>
       <el-table-column
-        prop="id"
+        prop="relation"
         label="关系"
         width="440">
       </el-table-column>
@@ -45,27 +46,23 @@
     data() {
       return {
         showDialog: false,
-        dataList: [],
-        exampleItem: {
-          name: 'j20',
-          type: '555',
-          action: 'fly'
-        }
+        dataList: []
       }
     },
     methods: {
       handleEdit(index, row) {
-        console.log('index', index)
-        console.log('row', row)
+        api.relations_id_delete(row.rid).then((data) => {
+          this.$message('删除关系成功')
+          api.entitys_id_relations_get(this.item.id).then((data) => {
+            this.dataList = data.data
+          })
+        })
       },
       closeModel() {
         this.showDialog = false
         api.entitys_id_relations_get(this.item.id).then((data) => {
           this.dataList = data.data
         })
-      },
-      test(el) {
-        console.log('传出来了' + el.action)
       }
     },
     components: {newRelationModal}

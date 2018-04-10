@@ -6,7 +6,7 @@
       </template>
     </el-input>
     <ul class="entitys-list">
-      <li v-for="item in list" @click="select(item.id)">{{item.name}}</li>
+      <li v-for="item in list" @click="select(item)">{{item.name}}</li>
     </ul>
   </div>
 </template>
@@ -32,8 +32,8 @@
           vm.list = data.data
         })
       },
-      select(id) {
-        this.$emit('selected', id)
+      select(item) {
+        this.$emit('selected', item)
       }
     }
   }
