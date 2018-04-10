@@ -1,16 +1,25 @@
 <template>
   <div class="app-container">
-    知识图谱iframe
+    <iframe :src="baseUrl+'/docs/gallery/graph.html'" frameborder="0"></iframe>
   </div>
 </template>
 
 <script>
-  export default {}
+  import baseUrl from '@/api/baseUrl'
+
+  export default {
+    data() {
+      return {
+        baseUrl
+      }
+    }
+  }
 </script>
 
 <style scoped>
-  .line {
-    text-align: center;
+  iframe {
+    height: 800px;
+    width: 100%;
   }
 </style>
 

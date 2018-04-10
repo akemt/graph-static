@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <entity-tree :id="this.$route.params.id"></entity-tree>
-    <entity-relation></entity-relation>
+    <entity-relation :item="this.$route.params"></entity-relation>
   </div>
 </template>
 
