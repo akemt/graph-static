@@ -1,9 +1,13 @@
 <template>
   <div class="app-container">
-    编辑实体
-    <search ajax-path="xxx" root-path="xxx" @selected="editEntity"></search>
-    other
-    <router-view></router-view>
+    <el-row>
+      <el-col :span="8">
+        <search ajax-path="entitys_get" root-path="xxx" @selected="editEntity"></search>
+      </el-col>
+      <el-col :span="16">
+        <router-view></router-view>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -11,6 +15,11 @@
   import search from '@/components/search/index'
 
   export default {
+    data() {
+      return {
+        search: ''
+      }
+    },
     methods: {
       editEntity(id) {
         this.$router.push({name: 'entity.item', params: {id}})

@@ -1,13 +1,18 @@
 <template>
   <div>
-    搜索框
-    {{ajaxPath}}
-    {{rootPath}}
-    <button @click="selected(1)">selected</button>
+    <el-input placeholder="请输入内容" v-model="searchStr">
+      <template slot="append">
+        <el-button type="success" @click="search">搜索</el-button>
+      </template>
+    </el-input>
+    <ul class="entitys-list">
+      <li v-for="item in list" @click="select(item.id)">{{item.name}}</li>
+    </ul>
   </div>
 </template>
 
 <script>
+  const api = require('@/api/index').kg
   /**
    * 搜索，点击列表，显示实体编辑界面
    */
@@ -16,11 +21,18 @@
     props: ['ajaxPath', 'rootPath'],
     data() {
       return {
-        searchStr: ''
+        searchStr: '',
+        list: []
       }
     },
     methods: {
-      selected(id) {
+      search() {
+        const vm = this
+        api[vm.ajaxPath]({searchStr: vm.searchStr}).then((data) => {
+          vm.list = data.data
+        })
+      },
+      select(id) {
         this.$emit('selected', id)
       }
     }
