@@ -1,15 +1,41 @@
 <template>
   <div class="">
-    <el-tree
-      default-expand-all
-      :expand-on-click-node="false"
-      :data="tree"
-      :props="defaultProps"
-      @node-click="updateNode">
-      <span class="tree-slot-node" slot-scope="{ node, data }">
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>{{name}}</span>
+        <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>
+      </div>
+      <el-tree
+        default-expand-all
+        :expand-on-click-node="false"
+        :data="tree"
+        :props="defaultProps">
+        <span class="tree-slot-node" slot-scope="{ node, data }">
         <label>
-          {{ node.label }}
-          <span v-if="data.value.length" v-for="v in data.value">{{v}}</span>
+          <!--<span v-show="show(data.$treeNodeId)" @click="editTitle(node, data)">{{ node.label }}</span>-->
+          <el-input v-model="data.name" size="mini"></el-input>
+          <span v-if="data.value.length" class="tag-list">
+            <el-tag
+              size="mini"
+              :key="tag"
+              v-for="tag in data.value"
+              closable
+              :disable-transitions="false"
+              @close="handleClose(tag)">
+              {{tag}}
+            </el-tag>
+            <el-input
+              class="input-new-tag"
+              v-if="inputVisible"
+              v-model="inputValue"
+              ref="saveTagInput"
+              size="small"
+              @keyup.enter.native="handleInputConfirm"
+              @blur="handleInputConfirm"
+            >
+            </el-input>
+            <el-button v-else class="" size="mini" @click="showInput">+ 新增</el-button>
+          </span>
         </label>
         <label class="button-group">
           <el-button
@@ -26,7 +52,8 @@
           </el-button>
         </label>
       </span>
-    </el-tree>
+      </el-tree>
+    </el-card>
   </div>
 </template>
 
@@ -42,7 +69,9 @@
         defaultProps: {
           children: 'children',
           label: 'name'
-        }
+        },
+        inputVisible: false,
+        inputValue: ''
       }
     },
     mounted() {
@@ -69,22 +98,29 @@
         const index = children.findIndex(d => d.id === data.id)
         children.splice(index, 1)
       },
-      updateNode(data, node, e) {
-        console.log(data)
-        console.log(node)
-        console.log(e)
+      handleClose(tag) {
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      },
+
+      showInput() {
+        this.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+      },
+
+      handleInputConfirm() {
+        let inputValue = this.inputValue;
+        if (inputValue) {
+          this.dynamicTags.push(inputValue);
+        }
+        this.inputVisible = false;
+        this.inputValue = '';
       }
     }
   }
 </script>
 
 <style scoped>
-  .tree-slot-node .button-group {
-    margin-left: 10px
-  }
-
-  .tree-slot-node .button-group button {
-    font-size: 14px;
-  }
 </style>
 
