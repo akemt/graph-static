@@ -2,7 +2,7 @@
   <div class="app-container">
     {{this.$route.params}}
     <entity-tree></entity-tree>
-    <entity-relation></entity-relation>
+    <entity-relation :item="this.$route.params"></entity-relation>
   </div>
 </template>
 
