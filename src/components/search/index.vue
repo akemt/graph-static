@@ -40,4 +40,18 @@
 </script>
 
 <style scoped>
+  ul.entitys-list {
+    list-style: none;
+    padding: 0 10px
+  }
+  ul.entitys-list li {
+    cursor: pointer;
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  ul.entitys-list li:hover {
+    color: #409eff;
+    font-size: 15px;
+  }
+
 </style>

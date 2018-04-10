@@ -1,7 +1,6 @@
 <template>
-  <div class="app-container">
-    {{this.$route.params}}
-    <entity-tree></entity-tree>
+  <div class="">
+    <entity-tree :id="this.$route.params.id"></entity-tree>
     <entity-relation></entity-relation>
   </div>
 </template>
@@ -17,4 +16,3 @@
 
 <style scoped>
 </style>
-
