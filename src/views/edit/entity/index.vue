@@ -3,7 +3,9 @@
     <el-button type="primary" plain @click="newEntity()" class="create-button">新建实体</el-button>
     <el-row>
       <el-col :span="8">
+        <el-card class="box-card">
         <search ajax-path="entitys_get" root-path="xxx" @selected="editEntity"></search>
+        </el-card>
       </el-col>
       <el-col :span="16">
         <router-view></router-view>
@@ -28,7 +30,7 @@
         this.$router.push({name: 'entity.item', params: {id: item.id}})
       },
       newEntity() {
-        api.entitys_post({json: '新建实体'}).then((data) => {
+        api.entitys_post({name: '新建实体'}).then((data) => {
           console.log('成功 ID：', data.data.id)
           this.$router.push({name: 'entity.item', params: {id: data.data.id}})
         })

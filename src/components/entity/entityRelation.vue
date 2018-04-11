@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <new-relation-modal :open.sync="showDialog" @close="closeModel()" :item="item"></new-relation-modal>
+
     <!--<button @click="showDialog = true">新建关系</button>-->
     <div>
       <!--<p class="entity-relation-p">实体：{{item.id}}</p>-->
@@ -28,7 +29,8 @@
           <el-button
             size="mini"
             type="primary" plain
-            @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+            @click="handleEdit(scope.$index, scope.row)">删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,6 +55,12 @@
         dataList: []
       }
     },
+    created() {
+      this.$watch('item.id', () => {
+        this.refreshData()
+      })
+      this.refreshData()
+    },
     methods: {
       go(item) {
         this.$router.push({params: {id: item.eid}})
@@ -60,16 +68,17 @@
       handleEdit(index, row) {
         api.relations_id_delete(row.rid).then((data) => {
           this.$message('删除关系成功')
-          api.entitys_id_relations_get(this.item.id).then((data) => {
-            this.dataList = data.data
-          })
+          this.refreshData()
+        })
+      },
+      refreshData() {
+        api.entitys_id_relations_get(this.item.id).then((data) => {
+          this.dataList = data.data
         })
       },
       closeModel() {
         this.showDialog = false
-        api.entitys_id_relations_get({path: {id: this.item.id}}).then((data) => {
-          this.dataList = data.data
-        })
+        this.refreshData()
       }
     },
     components: {newRelationModal}
@@ -77,6 +86,9 @@
 </script>
 
 <style scoped>
-  a{color:#000;text-decoration:underline;}
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
 </style>
 
