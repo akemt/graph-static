@@ -1,9 +1,11 @@
 <template>
   <div class="">
+    <new-templet-modal :open.sync="showDialog" @close="closeModel()" :tree="tree"></new-templet-modal>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <el-input v-model="treeName" size="small" style="width: auto"></el-input>
         <el-button style="float: right; padding: 3px 0" type="text" @click="saveTree">保存</el-button>
+        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true">新建模板</el-button>
       </div>
       <el-tree
         default-expand-all
@@ -49,13 +51,14 @@
 </template>
 
 <script>
-  /* eslint-disable quotes */
-
+  import newTempletModal from './newTempletModal'
   const api = require('@/api/index').kg
   export default {
+    components: {newTempletModal},
     props: ['id', 'ajaxPath'],
     data() {
       return {
+        showDialog: false,
         treeId: '',
         treeName: '',
         tree: [],
@@ -137,6 +140,9 @@
         }
         this.showInputId = -1
         this.inputTag = ''
+      },
+      closeModel() {
+        this.showDialog = false
       }
     }
   }
