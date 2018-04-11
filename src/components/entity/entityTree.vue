@@ -10,38 +10,52 @@
         :expand-on-click-node="false"
         :data="tree"
         :props="defaultProps">
-        <span class="tree-slot-node" slot-scope="{ node, data }" @mouseover="showTags = node.id"
-              @mouseleave="showTags = -1">
-        <label>
-          <!--<span v-show="show(data.$treeNodeId)" @click="editTitle(node, data)">{{ node.label }}</span>-->
-          <el-input v-model="data.name" size="mini"></el-input>
-          <span v-if="data.value" class="tag-list">
-            <el-tag
-              size="mini"
-              :key="tag"
-              v-for="tag in data.value"
-              closable
-              :disable-transitions="false"
-              @close="removeTag(tag, data.value)">
-              {{tag}}
-            </el-tag>
-            <el-input
-              v-if="showInputId == data.id"
-              v-model="inputTag"
-              ref="saveTagInput"
-              size="mini"
-              @keyup.enter.native="inputTagConfirm(data.value)"
-              @blur="inputTagConfirm(data.value)"
-            >
-            </el-input>
-          </span>
-          <span class="button-group" v-if="showTags == node.id">
-            <el-button size="mini" @click="showInput(data.id, node)">+ 新增</el-button>
-            <el-button type="text" size="mini" @click="appendNode(data)" icon="el-icon-circle-plus-outline"></el-button>
-            <el-button type="text" size="mini" @click="removeNode(node, data)" icon="el-icon-circle-close-outline"></el-button>
-          </span>
-        </label>
-      </span>
+        <span class="tree-slot-node" slot-scope="{ node, data }">
+          <label>
+            <el-select
+              v-model="data.name"
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading">
+              <el-option
+                v-for="item in searchResult"
+                :key="item.id"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+            <span v-if="data.value" class="tag-list">
+              <el-tag
+                size="mini"
+                :key="tag"
+                v-for="tag in data.value"
+                closable
+                :disable-transitions="false"
+                @close="removeTag(tag, data.value)">
+                {{tag}}
+              </el-tag>
+              <el-input
+                v-if="showInputId == data.id"
+                v-model="inputTag"
+                ref="saveTagInput"
+                size="mini"
+                @keyup.enter.native="inputTagConfirm(data.value)"
+                @blur="inputTagConfirm(data.value)"
+              >
+              </el-input>
+            </span>
+            <span class="button-group">
+              <el-button size="mini" @click="showInput(data.id, node)">+ 新增</el-button>
+              <el-button type="text" size="mini" @click="appendNode(data)"
+                         icon="el-icon-circle-plus-outline"></el-button>
+              <el-button type="text" size="mini" @click="removeNode(node, data)"
+                         icon="el-icon-circle-close-outline"></el-button>
+            </span>
+          </label>
+        </span>
       </el-tree>
       <el-button size="mini" icon="el-icon-plus" @click="appendRootNode">增加根节点</el-button>
     </el-card>
@@ -49,8 +63,6 @@
 </template>
 
 <script>
-  /* eslint-disable quotes */
-
   const api = require('@/api/index').kg
   export default {
     props: ['id', 'ajaxPath'],
@@ -63,7 +75,8 @@
           children: 'children',
           label: 'name'
         },
-        showTags: -1,
+        searchResult: [],
+        loading: false,
         showInputId: -1,
         inputTag: ''
       }
@@ -94,7 +107,7 @@
           name: _vm.treeName,
           define: _vm.tree
         }
-        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, json: content}).then((data) => {
+        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, data: {json: content}}).then((data) => {
           if (Object.is(data.code, 200)) {
             _vm.$message({
               message: data.msg,
@@ -102,6 +115,19 @@
             })
           }
         })
+      },
+      remoteMethod(query) {
+        if (!Object.is(query, '')) {
+          this.loading = true
+          setTimeout(() => {
+            api.attributes_keys({params: {searchStr: query}}).then((data) => {
+              this.loading = false
+              this.searchResult = data.data
+            })
+          }, 200)
+        } else {
+          this.searchResult = []
+        }
       },
       appendRootNode() {
         const node = {name: '新节点', children: [], value: []}

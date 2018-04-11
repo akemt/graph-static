@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input placeholder="请输入内容" v-model="searchStr">
+    <el-input placeholder="请输入内容" v-model="searchStr" @keyup.enter.native="search">
       <template slot="append">
         <el-button type="success" @click="search">搜索</el-button>
       </template>

@@ -2,7 +2,9 @@
   <div class="app-container">
     <el-row>
       <el-col :span="8">
-        <search ajax-path="models_get" root-path="xxx" @selected="editModel"></search>
+        <el-card class="box-card">
+          <search ajax-path="models_get" root-path="xxx" @selected="editModel"></search>
+        </el-card>
       </el-col>
       <el-col :span="16">
         <router-view></router-view>

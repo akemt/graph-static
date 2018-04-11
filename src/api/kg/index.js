@@ -19,6 +19,15 @@ function user_login_post(opts) {
   })
 }
 
+/** 获得属性信息searchStr，10项 */
+function attributes_keys(opts) {
+  return instance({
+    method: 'get',
+    url: '/attributes/keys',
+    opts: opts
+  })
+}
+
 /** 获得用户信息 */
 function user_get(opts) {
   return instance({
@@ -158,6 +167,7 @@ export {
   user_logout_get,
   user_login_post,
   user_get,
+  attributes_keys,
   attributes_id_get,
   models_id_delete,
   models_id_post,
