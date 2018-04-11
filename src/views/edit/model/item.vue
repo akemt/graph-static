@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <entity-tree :id="this.$route.params.id" :ajaxPath="{init: 'models_id_get', save: 'models_id_post'}"></entity-tree>
+    <entity-tree :id="this.$route.params.id" :ajaxPath="{init: 'models_id_get', save: 'models_id_post'}" :type="'model'"></entity-tree>
   </div>
 </template>
 

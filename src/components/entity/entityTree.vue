@@ -5,7 +5,7 @@
       <div slot="header" class="clearfix">
         <el-input v-model="treeName" size="small" style="width: auto"></el-input>
         <el-button style="float: right; padding: 3px 0" type="text" @click="saveTree">保存</el-button>
-        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true">新建模板</el-button>
+        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true" v-if="type == 'model'">新建模板</el-button>
       </div>
       <el-tree
         default-expand-all
@@ -50,7 +50,7 @@
               </el-input>
             </span>
             <span class="button-group">
-              <el-button size="mini" @click="showInput(data.id, node)">+ 新增</el-button>
+              <el-button size="mini" @click="showInput(data.id, node)" v-if="type == 'entity'">+ 新增</el-button>
               <el-button type="text" size="mini" @click="appendNode(data)"
                          icon="el-icon-circle-plus-outline"></el-button>
               <el-button type="text" size="mini" @click="removeNode(node, data)"
@@ -69,7 +69,7 @@
   const api = require('@/api/index').kg
   export default {
     components: {newTempletModal},
-    props: ['id', 'ajaxPath'],
+    props: ['id', 'ajaxPath', 'type'],
     data() {
       return {
         showDialog: false,
