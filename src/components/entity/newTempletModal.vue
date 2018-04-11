@@ -3,10 +3,10 @@
     <!--* 新建关系按钮，和表格-->
     <!--* 表格分为三列-->
     <el-row>
-      <el-form>
-        <el-form-item>
+      <el-form :model="templetForm" :rules="createTempletRules" ref="templetForm">
+        <el-form-item prop="templetName">
           <span class="svg-container svg-container_login">模板名</span>
-          <el-input type="text" v-model="templetName" placeholder="请输入关系"/>
+          <el-input name="templetName" type="text" v-model="templetForm.templetName" placeholder="请输入关系"/>
         </el-form-item>
       </el-form>
     </el-row>
@@ -27,21 +27,50 @@
   export default {
     props: ['open', 'tree'],
     data() {
+      const validateType = (rule, value, callback) => {
+        if (!(value)) {
+          callback(new Error('输入不能为空'))
+        } else {
+          callback()
+        }
+      }
       return {
-        templetName: null,
-        templetTree: null
+        templetForm: {
+          templetName: null
+        },
+        templetTree: null,
+        createTempletRules: {
+          templetName: [{required: true, trigger: 'blur', validator: validateType}]
+        }
       }
     },
     methods: {
-      ok() {
-        api.models_post({name: this.templetName}).then((data) => {
+      // 新建模板，跳转到模板页面
+      createTemplet() {
+        api.models_post({name: this.templetForm.templetName}).then((data) => {
           const id = data.data.id
           this.templetTree = Object.assign({}, this.tree)
           this.cleanEntityValue(this.templetTree)
-          api.models_id_get({id: id, name: this.templetName, define: this.templetTree}).then((data) => {
+          const modelsPostParams = {
+            path: {id: id},
+            name: this.templetForm.templetName,
+            define: JSON.stringify(this.templetTree)
+          }
+          api.models_id_post(modelsPostParams).then((data) => {
             this.close()
             this.$router.push({name: 'model.item', params: {id: id}})
           })
+        })
+      },
+      ok() {
+        this.$refs.templetForm.validate(valid => {
+          if (valid) {
+            this.createTemplet()
+          } else {
+            // 提示
+            this.$message('输入不能为空')
+            return false
+          }
         })
       },
       close() {

@@ -66,13 +66,13 @@
         this.$router.push({params: {id: item.eid}})
       },
       handleEdit(index, row) {
-        api.relations_id_delete(row.rid).then((data) => {
+        api.relations_id_delete({path: {id: row.rid}}).then((data) => {
           this.$message('删除关系成功')
           this.refreshData()
         })
       },
       refreshData() {
-        api.entitys_id_relations_get(this.item.id).then((data) => {
+        api.entitys_id_relations_get({path: {id: this.item.id}}).then((data) => {
           this.dataList = data.data
         })
       },
