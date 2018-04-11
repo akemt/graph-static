@@ -69,7 +69,7 @@
       ok() {
         this.$refs.createRelationForm.validate(valid => {
           if (valid) {
-            api.entitys_id_relations_post({path: {id: this.item.id}, json: JSON.stringify(this.createRelationForm)}).then((data) => {
+            api.entitys_id_relations_post({path: {id: this.item.id}, data: {json: JSON.stringify(this.createRelationForm)}}).then((data) => {
               // 提示
               this.$message('创建关系成功')
               this.close()

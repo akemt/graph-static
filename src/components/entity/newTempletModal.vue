@@ -47,14 +47,16 @@
     methods: {
       // 新建模板，跳转到模板页面
       createTemplet() {
-        api.models_post({name: this.templetForm.templetName}).then((data) => {
+        api.models_post({data: {name: this.templetForm.templetName}}).then((data) => {
           const id = data.data.id
           this.templetTree = Object.assign({}, this.tree)
           this.cleanEntityValue(this.templetTree)
           const modelsPostParams = {
             path: {id: id},
-            name: this.templetForm.templetName,
-            define: JSON.stringify(this.templetTree)
+            data: {
+              name: this.templetForm.templetName,
+              define: JSON.stringify(this.templetTree)
+            }
           }
           api.models_id_post(modelsPostParams).then((data) => {
             this.close()
