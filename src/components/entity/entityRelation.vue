@@ -8,11 +8,15 @@
     </div>
     <el-table
       :data="dataList"
-      style="width: 100%">
+      style="width: 100%"
+    >
       <el-table-column
         prop="ename"
         label="实体"
         width="440">
+        <template slot-scope="scope">
+          <p @click="go(scope.row)"><a>{{scope.row.ename}}</a></p>
+        </template>
       </el-table-column>
       <el-table-column
         prop="relation"
@@ -50,6 +54,9 @@
       }
     },
     methods: {
+      go(item) {
+        this.$router.push({params: {id: item.eid}})
+      },
       handleEdit(index, row) {
         api.relations_id_delete(row.rid).then((data) => {
           this.$message('删除关系成功')
@@ -60,7 +67,7 @@
       },
       closeModel() {
         this.showDialog = false
-        api.entitys_id_relations_get(this.item.id).then((data) => {
+        api.entitys_id_relations_get({path: {id: this.item.id}}).then((data) => {
           this.dataList = data.data
         })
       }
@@ -70,5 +77,6 @@
 </script>
 
 <style scoped>
+  a{color:#000;text-decoration:underline;}
 </style>
 
