@@ -73,16 +73,29 @@ export const constantRouterMap = [
             // hidden: true,
             component: () => import('@/views/edit/entity/home')
           }, {
-            path: 'edit/entity/:id',
+            path: ':id',
             name: 'entity.item',
             hidden: true,
             component: () => import('@/views/edit/entity/item')
           }]
       }, {
-        path: 'model',
+        path: '/edit/model',
         name: 'model',
         component: () => import('@/views/edit/model/index'),
-        meta: {title: '模型', icon: 'form'}
+        meta: {title: '模型', icon: 'form'},
+        normal: true,
+        children: [
+          {
+            path: '',
+            name: 'model.home',
+            // hidden: true,
+            component: () => import('@/views/edit/model/home')
+          }, {
+            path: ':id',
+            name: 'model.item',
+            hidden: true,
+            component: () => import('@/views/edit/model/item')
+          }]
       }
     ]
   },
