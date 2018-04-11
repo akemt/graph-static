@@ -10,12 +10,12 @@
         :expand-on-click-node="false"
         :data="tree"
         :props="defaultProps">
-        <span class="tree-slot-node" slot-scope="{ node, data }" @mouseover="showTags = node.id" @mouseleave="showTags = -1">
-        <label class="button-group">
+        <span class="tree-slot-node" slot-scope="{ node, data }" @mouseover="showTags = node.id"
+              @mouseleave="showTags = -1">
+        <label>
           <!--<span v-show="show(data.$treeNodeId)" @click="editTitle(node, data)">{{ node.label }}</span>-->
           <el-input v-model="data.name" size="mini"></el-input>
-          <span v-if="showTags == node.id">
-            <span v-if="data.value" class="tag-list">
+          <span v-if="data.value" class="tag-list">
             <el-tag
               size="mini"
               :key="tag"
@@ -34,20 +34,11 @@
               @blur="inputTagConfirm(data.value)"
             >
             </el-input>
-            <el-button v-else size="mini" @click="showInput(data.id, node)">+ 新增</el-button>
           </span>
-          <el-button
-            type="text"
-            size="mini"
-            @click="appendNode(data)">
-            <i class="el-icon-circle-plus-outline"></i>
-          </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="removeNode(node, data)">
-            <i class="el-icon-circle-close-outline"></i>
-          </el-button>
+          <span class="button-group" v-if="showTags == node.id">
+            <el-button size="mini" @click="showInput(data.id, node)">+ 新增</el-button>
+            <el-button type="text" size="mini" @click="appendNode(data)" icon="el-icon-circle-plus-outline"></el-button>
+            <el-button type="text" size="mini" @click="removeNode(node, data)" icon="el-icon-circle-close-outline"></el-button>
           </span>
         </label>
       </span>
@@ -58,6 +49,8 @@
 </template>
 
 <script>
+  /* eslint-disable quotes */
+
   const api = require('@/api/index').kg
   export default {
     props: ['id', 'ajaxPath'],
@@ -80,6 +73,13 @@
     },
     methods: {
       init() {
+        const _vm = this
+        _vm.initAjax()
+        _vm.$watch('id', () => {
+          _vm.initAjax()
+        })
+      },
+      initAjax() {
         const _vm = this
         api[_vm['ajaxPath']['init']]({path: {id: _vm.id}}).then((data) => {
           _vm.tree = data.data.define
