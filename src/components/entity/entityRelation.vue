@@ -1,11 +1,10 @@
 <template>
-  <div class="app-container">
+  <div class="">
     <new-relation-modal :open.sync="showDialog" @close="closeModel()" :item="item"></new-relation-modal>
-
-    <!--<button @click="showDialog = true">新建关系</button>-->
+    <el-card class="box-card">
     <div>
-      <!--<p class="entity-relation-p">实体：{{item.id}}</p>-->
-      <el-button type="primary" plain @click="showDialog = true" class="entity-relation-float">新建关系</el-button>
+      <el-button style="float: right; padding: 3px 0" type="text" @click="showDialog = true">新建关系</el-button>
+      <!--<el-button type="primary" plain @click="showDialog = true" class="entity-relation-float">新建关系</el-button>-->
     </div>
     <el-table
       :data="dataList"
@@ -34,6 +33,7 @@
         </template>
       </el-table-column>
     </el-table>
+    </el-card>
   </div>
 </template>
 
@@ -66,13 +66,13 @@
         this.$router.push({params: {id: item.eid}})
       },
       handleEdit(index, row) {
-        api.relations_id_delete(row.rid).then((data) => {
+        api.relations_id_delete({path: {id: row.rid}}).then((data) => {
           this.$message('删除关系成功')
           this.refreshData()
         })
       },
       refreshData() {
-        api.entitys_id_relations_get(this.item.id).then((data) => {
+        api.entitys_id_relations_get({path: {id: this.item.id}}).then((data) => {
           this.dataList = data.data
         })
       },

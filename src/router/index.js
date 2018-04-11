@@ -82,7 +82,7 @@ export const constantRouterMap = [
         path: '/edit/model',
         name: 'model',
         component: () => import('@/views/edit/model/index'),
-        meta: {title: '模型', icon: 'form'},
+        meta: {title: '实体类', icon: 'form'},
         normal: true,
         children: [
           {

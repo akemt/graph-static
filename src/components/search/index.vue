@@ -28,7 +28,7 @@
     methods: {
       search() {
         const vm = this
-        api[vm.ajaxPath]({searchStr: vm.searchStr}).then((data) => {
+        api[vm.ajaxPath]({params: {searchStr: vm.searchStr}}).then((data) => {
           vm.list = data.data
         })
       },
@@ -44,11 +44,13 @@
     list-style: none;
     padding: 0 10px
   }
+
   ul.entitys-list li {
     cursor: pointer;
     padding: 5px 0;
     font-size: 14px;
   }
+
   ul.entitys-list li:hover {
     color: #409eff;
     font-size: 15px;
