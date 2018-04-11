@@ -5,8 +5,8 @@
     <el-row>
       <el-form :model="templetForm" :rules="createTempletRules" ref="templetForm">
         <el-form-item prop="templetName">
-          <span class="svg-container svg-container_login">模板名</span>
-          <el-input name="templetName" type="text" v-model="templetForm.templetName" placeholder="请输入模板名"/>
+          <span class="svg-container svg-container_login">实体类名</span>
+          <el-input name="templetName" type="text" v-model="templetForm.templetName" placeholder="请输入实体类名"/>
         </el-form-item>
       </el-form>
     </el-row>
@@ -60,7 +60,7 @@
           }
           api.models_id_post(modelsPostParams).then((data) => {
             this.close()
-            this.$message('新建模板成功')
+            this.$message('新建实体类成功')
             this.$router.push({name: 'model.item', params: {id: id}})
           })
         })
