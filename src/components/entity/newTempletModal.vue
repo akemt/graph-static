@@ -49,7 +49,7 @@
       createTemplet() {
         api.models_post({data: {name: this.templetForm.templetName}}).then((data) => {
           const id = data.data.id
-          this.templetTree = Object.assign({}, this.tree)
+          this.templetTree = JSON.parse(JSON.stringify(this.tree))
           this.cleanEntityValue(this.templetTree)
           const modelsPostParams = {
             path: {id: id},
@@ -60,6 +60,7 @@
           }
           api.models_id_post(modelsPostParams).then((data) => {
             this.close()
+            this.$message('新建模板成功')
             this.$router.push({name: 'model.item', params: {id: id}})
           })
         })
@@ -80,7 +81,7 @@
       },
       cleanEntityValue(tree) {
         for (var index in tree) {
-          tree[index].value = ''
+          tree[index].value = null
           if (tree[index].children) {
             this.cleanEntityValue(tree[index].children)
           }

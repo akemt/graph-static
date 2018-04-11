@@ -33,7 +33,7 @@
       },
       newEntity() {
         api.entitys_post({name: '新建实体'}).then((data) => {
-          console.log('成功 ID：', data.data.id)
+          this.$message('新建实体成功')
           this.$router.push({name: 'entity.item', params: {id: data.data.id}})
         })
       }
