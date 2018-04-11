@@ -6,7 +6,7 @@
       <el-form :model="templetForm" :rules="createTempletRules" ref="templetForm">
         <el-form-item prop="templetName">
           <span class="svg-container svg-container_login">模板名</span>
-          <el-input name="templetName" type="text" v-model="templetForm.templetName" placeholder="请输入关系"/>
+          <el-input name="templetName" type="text" v-model="templetForm.templetName" placeholder="请输入模板名"/>
         </el-form-item>
       </el-form>
     </el-row>
