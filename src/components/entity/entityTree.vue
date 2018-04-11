@@ -2,76 +2,77 @@
   <div class="">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>{{name}}</span>
-        <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>
+        <el-input v-model="treeName" size="small" style="width: auto"></el-input>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="saveTree">保存</el-button>
       </div>
       <el-tree
         default-expand-all
         :expand-on-click-node="false"
         :data="tree"
         :props="defaultProps">
-        <span class="tree-slot-node" slot-scope="{ node, data }">
-        <label>
+        <span class="tree-slot-node" slot-scope="{ node, data }" @mouseover="showTags = node.id" @mouseleave="showTags = -1">
+        <label class="button-group">
           <!--<span v-show="show(data.$treeNodeId)" @click="editTitle(node, data)">{{ node.label }}</span>-->
           <el-input v-model="data.name" size="mini"></el-input>
-          <span v-if="data.value.length" class="tag-list">
+          <span v-if="showTags == node.id">
+            <span v-if="data.value" class="tag-list">
             <el-tag
               size="mini"
               :key="tag"
               v-for="tag in data.value"
               closable
               :disable-transitions="false"
-              @close="handleClose(tag)">
+              @close="removeTag(tag, data.value)">
               {{tag}}
             </el-tag>
             <el-input
-              class="input-new-tag"
-              v-if="inputVisible"
-              v-model="inputValue"
+              v-if="showInputId == data.id"
+              v-model="inputTag"
               ref="saveTagInput"
-              size="small"
-              @keyup.enter.native="handleInputConfirm"
-              @blur="handleInputConfirm"
+              size="mini"
+              @keyup.enter.native="inputTagConfirm(data.value)"
+              @blur="inputTagConfirm(data.value)"
             >
             </el-input>
-            <el-button v-else class="" size="mini" @click="showInput">+ 新增</el-button>
+            <el-button v-else size="mini" @click="showInput(data.id, node)">+ 新增</el-button>
           </span>
-        </label>
-        <label class="button-group">
           <el-button
             type="text"
             size="mini"
-            @click="append(data)">
+            @click="appendNode(data)">
             <i class="el-icon-circle-plus-outline"></i>
           </el-button>
           <el-button
             type="text"
             size="mini"
-            @click="remove(node, data)">
+            @click="removeNode(node, data)">
             <i class="el-icon-circle-close-outline"></i>
           </el-button>
+          </span>
         </label>
       </span>
       </el-tree>
+      <el-button size="mini" icon="el-icon-plus" @click="appendRootNode">增加根节点</el-button>
     </el-card>
   </div>
 </template>
 
 <script>
   const api = require('@/api/index').kg
-  let id = 1000
   export default {
-    props: ['id'],
+    props: ['id', 'ajaxPath'],
     data() {
       return {
-        name: '',
+        treeId: '',
+        treeName: '',
         tree: [],
         defaultProps: {
           children: 'children',
           label: 'name'
         },
-        inputVisible: false,
-        inputValue: ''
+        showTags: -1,
+        showInputId: -1,
+        inputTag: ''
       }
     },
     mounted() {
@@ -80,42 +81,62 @@
     methods: {
       init() {
         const _vm = this
-        api.entitys_id_get({path: {id: _vm.id}}).then((data) => {
+        api[_vm['ajaxPath']['init']]({path: {id: _vm.id}}).then((data) => {
           _vm.tree = data.data.define
-          _vm.name = data.data.name
+          _vm.treeName = data.data.name
+          _vm.treeId = data.data.id
         })
       },
-      append(data) {
-        const newChild = {id: id++, name: '新节点', children: []}
+      saveTree() {
+        const _vm = this
+        const content = {
+          id: _vm.treeId,
+          name: _vm.treeName,
+          define: _vm.tree
+        }
+        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, json: content}).then((data) => {
+          if (Object.is(data.code, 200)) {
+            _vm.$message({
+              message: data.msg,
+              type: 'success'
+            })
+          }
+        })
+      },
+      appendRootNode() {
+        const node = {name: '新节点', children: [], value: []}
+        this.tree.push(node)
+      },
+      appendNode(data) {
+        const newChild = {name: '新节点', children: [], value: []}
         if (!data.children) {
           this.$set(data, 'children', [])
+          this.$set(data, 'value', [])
         }
         data.children.push(newChild)
       },
-      remove(node, data) {
+      removeNode(node, data) {
         const parent = node.parent
         const children = parent.data.children || parent.data
         const index = children.findIndex(d => d.id === data.id)
         children.splice(index, 1)
       },
-      handleClose(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      removeTag(tag, data) {
+        data.splice(data.indexOf(tag), 1)
       },
-
-      showInput() {
-        this.inputVisible = true;
+      showInput(id, node) {
+        this.showInputId = id
         this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
+          this.$refs.saveTagInput.$refs.input.focus()
+        })
       },
-
-      handleInputConfirm() {
-        let inputValue = this.inputValue;
+      inputTagConfirm(data) {
+        const inputValue = this.inputTag
         if (inputValue) {
-          this.dynamicTags.push(inputValue);
+          data.push(inputValue)
         }
-        this.inputVisible = false;
-        this.inputValue = '';
+        this.showInputId = -1
+        this.inputTag = ''
       }
     }
   }
