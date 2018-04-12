@@ -127,7 +127,7 @@
           name: _vm.treeName,
           define: _vm.tree
         }
-        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, data: {json: content}}).then((data) => {
+        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, data: {json: JSON.stringify(content)}}).then((data) => {
           if (Object.is(data.code, 200)) {
             _vm.$message({
               message: data.msg,
