@@ -5,7 +5,7 @@
       <div slot="header" class="clearfix">
         <el-input v-model="treeName" size="small" style="width: auto"></el-input>
         <el-button style="float: right; padding: 3px 0" type="text" @click="saveTree">保存</el-button>
-        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true" v-if="type == 'model'">新建模板</el-button>
+        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true" v-if="type == 'model'">新建实体类</el-button>
       </div>
       <el-tree
         default-expand-all
