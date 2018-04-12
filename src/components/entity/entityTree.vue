@@ -29,7 +29,7 @@
                 :value="item.name">
               </el-option>
             </el-select>
-            <span v-if="data.value" class="tag-list">
+            <span v-if="data.value && type == 'entity'" class="tag-list">
               <el-tag
                 size="mini"
                 :key="tag"
