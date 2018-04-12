@@ -1,8 +1,12 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card div-button">
-      <el-button type="primary" plain @click="newEntity()" class="button-right">新建实体</el-button>
-    </el-card>
+    <!--<el-row>-->
+      <!--<el-col :span="24">-->
+        <!--<el-card class="box-card div-button">-->
+          <!--<el-button size="mini" type="primary" plain @click="newEntity()" class="button-right">新建实体</el-button>-->
+        <!--</el-card>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
     <el-row>
       <el-col :span="8">
         <el-card class="box-card">
@@ -45,6 +49,7 @@
 <style scoped>
   .div-button{
     text-align:right;
+    margin-bottom: 10px;
   }
   .button-right{
     text-align:right;

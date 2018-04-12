@@ -8,20 +8,17 @@
     </div>
     <el-table
       :data="dataList"
-      style="width: 100%"
-    >
+      style="width: 100%">
       <el-table-column
         prop="ename"
-        label="实体"
-        width="440">
+        label="实体">
         <template slot-scope="scope">
           <p @click="go(scope.row)"><a>{{scope.row.ename}}</a></p>
         </template>
       </el-table-column>
       <el-table-column
         prop="relation"
-        label="关系"
-        width="440">
+        label="关系">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
