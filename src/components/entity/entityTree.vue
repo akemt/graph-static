@@ -5,7 +5,9 @@
       <div slot="header" class="clearfix">
         <el-input v-model="treeName" size="small" style="width: auto"></el-input>
         <el-button style="float: right; padding: 3px 0" type="text" @click="saveTree">保存</el-button>
-        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true" v-if="type == 'model'">新建实体类</el-button>
+        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true"
+                   v-if="type == 'model'">新建实体类
+        </el-button>
       </div>
       <el-tree
         default-expand-all
@@ -17,10 +19,13 @@
             <el-select
               v-model="data.name"
               filterable
+              allow-create
               remote
               reserve-keyword
               placeholder="请输入关键词"
               :remote-method="remoteMethod"
+              @blur="remote(data, $event)"
+              @keyup.enter.native="remote(data, $event)"
               :loading="loading">
               <el-option
                 v-for="item in searchResult"
@@ -66,6 +71,7 @@
 
 <script>
   import newTempletModal from './newTempletModal'
+
   const api = require('@/api/index').kg
   export default {
     components: {newTempletModal},
@@ -120,6 +126,9 @@
             })
           }
         })
+      },
+      remote(data, event) {
+        data.name = event.target.value
       },
       remoteMethod(query) {
         if (!Object.is(query, '')) {
