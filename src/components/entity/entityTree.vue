@@ -1,12 +1,18 @@
 <template>
   <div class="">
-    <new-templet-modal :open.sync="showDialog" @close="closeModel()" :tree="tree"></new-templet-modal>
+    <new-templet-modal :open.sync="showNewTempletDialog" @close="closeModel()" :tree="tree"></new-templet-modal>
+    <new-entity-by-templet :open.sync="showNewEntityByTempletDialog" @close="closeModel()"
+                           :tree="tree"></new-entity-by-templet>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-input v-model="treeName" size="small" style="width: auto"></el-input>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="saveTree">保存</el-button>
-        <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="showDialog = true"
-                   v-if="type == 'model'">新建实体类
+        <span v-if="type == 'entity'&&modelName.length>0" size="small" style="width: auto;">[{{modelName}}]</span>
+        <el-input v-model="treeName" size="small" style="width: 60%;"></el-input>
+        <el-button style="float: right; padding: 8px 0" type="text" @click="saveTree">保存</el-button>
+        <el-button style="float: right; padding: 8px 0; margin-right: 10px;" type="text"
+                   @click="showNewTempletDialog = true" v-if="type == 'entity'">以此实体新建实体类
+        </el-button>
+        <el-button style="float: right; padding: 8px 0; margin-right: 10px;" type="text"
+                   @click="showNewEntityByTempletDialog = true" v-if="type == 'model'">以此实体类新建实体
         </el-button>
       </div>
       <el-tree
@@ -71,16 +77,20 @@
 
 <script>
   import newTempletModal from './newTempletModal'
+  import newEntityByTemplet from './newEntityByTemplet'
 
   const api = require('@/api/index').kg
   export default {
-    components: {newTempletModal},
+    components: {newEntityByTemplet, newTempletModal},
     props: ['id', 'ajaxPath', 'type'],
     data() {
       return {
-        showDialog: false,
+        showNewTempletDialog: false,
+        showNewEntityByTempletDialog: false,
         treeId: '',
         treeName: '',
+        modelId: '',
+        modelName: '',
         tree: [],
         defaultProps: {
           children: 'children',
@@ -109,6 +119,8 @@
           _vm.tree = data.data.define
           _vm.treeName = data.data.name
           _vm.treeId = data.data.id
+          _vm.modelId = data.data.mid
+          _vm.modelName = data.data.model
         })
       },
       saveTree() {
@@ -118,7 +130,7 @@
           name: _vm.treeName,
           define: _vm.tree
         }
-        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, data: {json: content}}).then((data) => {
+        api[_vm['ajaxPath']['save']]({path: {id: _vm.id}, data: {json: JSON.stringify(content)}}).then((data) => {
           if (Object.is(data.code, 200)) {
             _vm.$message({
               message: data.msg,
@@ -179,7 +191,8 @@
         this.inputTag = ''
       },
       closeModel() {
-        this.showDialog = false
+        this.showNewTempletDialog = false
+        this.showNewEntityByTempletDialog = false
       }
     }
   }
