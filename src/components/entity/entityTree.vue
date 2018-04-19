@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <new-templet-modal :open.sync="showNewTempletDialog" @close="closeModel()" :tree="tree"></new-templet-modal>
-    <new-entity-by-templet :open.sync="showNewEntityByTempletDialog" @close="closeModel()"
-                           :tree="tree"></new-entity-by-templet>
+    <new-templet-by-entity-modal :open.sync="showNewTempletDialog" @close="closeModel()" :tree="tree"></new-templet-by-entity-modal>
+    <new-entity-by-templet-modal :open.sync="showNewEntityByTempletDialog" @close="closeModel()"
+                           :tree="tree"></new-entity-by-templet-modal>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span v-if="type == 'entity'&&modelName.length>0" size="small" style="width: auto;">[{{modelName}}]</span>
@@ -76,12 +76,12 @@
 </template>
 
 <script>
-  import newTempletModal from './newTempletModal'
-  import newEntityByTemplet from './newEntityByTemplet'
+  import newTempletByEntityModal from './newTempletByEntityModal'
+  import newEntityByTempletModal from './newEntityByTempletModal'
 
   const api = require('@/api/index').kg
   export default {
-    components: {newEntityByTemplet, newTempletModal},
+    components: {newEntityByTempletModal, newTempletByEntityModal},
     props: ['id', 'ajaxPath', 'type'],
     data() {
       return {
