@@ -25,7 +25,7 @@
   const api = require('@/api/kg/index')
 
   export default {
-    props: ['open', 'tree'],
+    props: ['open', 'tree', 'id'],
     data() {
       const validateType = (rule, value, callback) => {
         if (!(value)) {
@@ -72,9 +72,11 @@
             path: {id: id},
             data: {
               name: this.entityForm.entityName,
+              mid: this.id,
               define: JSON.stringify(this.tree)
             }
           }
+          console.log('entityPostParams:', entityPostParams)
           api.entitys_id_post(entityPostParams).then((data) => {
             this.close()
             this.$message('新建实体成功')

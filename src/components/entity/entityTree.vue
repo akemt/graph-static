@@ -1,8 +1,9 @@
 <template>
   <div class="">
-    <new-templet-by-entity-modal :open.sync="showNewTempletByEntityDialog" @close="closeModel()" :tree="tree"></new-templet-by-entity-modal>
+    <new-templet-by-entity-modal :open.sync="showNewTempletByEntityDialog" @close="closeModel()"
+                              :id="id"   :tree="tree"></new-templet-by-entity-modal>
     <new-entity-by-templet-modal :open.sync="showNewEntityByTempletDialog" @close="closeModel()"
-                           :tree="tree"></new-entity-by-templet-modal>
+                                 :id="id"  :tree="tree"></new-entity-by-templet-modal>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span v-if="type == 'entity'&&modelName.length>0" size="small" style="width: auto;">[{{modelName}}]</span>
