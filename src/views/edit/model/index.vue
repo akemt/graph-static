@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <create-templet-modal :open.sync="showNewTempletDialog" @close="closeModel()"></create-templet-modal>
     <el-row>
       <el-col :span="24">
         <el-card class="box-card div-button">
@@ -22,12 +23,14 @@
 
 <script>
   import search from '@/components/search/index'
-  const api = require('@/api/kg/index')
+  import createTempletModal from '../../../components/entity/createTempletModal'
+  // const api = require('@/api/kg/index')
 
   export default {
     data() {
       return {
-        search: ''
+        search: '',
+        showNewTempletDialog: false
       }
     },
     methods: {
@@ -35,13 +38,17 @@
         this.$router.push({name: 'model.item', params: {id: item.id}})
       },
       newTemplet() {
-        api.models_post({data: {name: '新建实体类'}}).then((data) => {
-          this.$message('新建实体类成功')
-          this.$router.push({name: 'model.item', params: {id: data.data.id}})
-        })
+        this.showNewTempletDialog = true
+        // api.models_post({data: {name: '新建实体类'}}).then((data) => {
+        //   this.$message('新建实体类成功')
+        //   this.$router.push({name: 'model.item', params: {id: data.data.id}})
+        // })
+      },
+      closeModel() {
+        this.showNewTempletDialog = false
       }
     },
-    components: {search}
+    components: {createTempletModal, search}
   }
 </script>
 

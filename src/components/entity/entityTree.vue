@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <new-templet-by-entity-modal :open.sync="showNewTempletDialog" @close="closeModel()" :tree="tree"></new-templet-by-entity-modal>
+    <new-templet-by-entity-modal :open.sync="showNewTempletByEntityDialog" @close="closeModel()" :tree="tree"></new-templet-by-entity-modal>
     <new-entity-by-templet-modal :open.sync="showNewEntityByTempletDialog" @close="closeModel()"
                            :tree="tree"></new-entity-by-templet-modal>
     <el-card class="box-card">
@@ -9,7 +9,7 @@
         <el-input v-model="treeName" size="small" style="width: 60%;"></el-input>
         <el-button style="float: right; padding: 8px 0" type="text" @click="saveTree">保存</el-button>
         <el-button style="float: right; padding: 8px 0; margin-right: 10px;" type="text"
-                   @click="showNewTempletDialog = true" v-if="type == 'entity'">以此实体新建实体类
+                   @click="showNewTempletByEntityDialog = true" v-if="type == 'entity'">以此实体新建实体类
         </el-button>
         <el-button style="float: right; padding: 8px 0; margin-right: 10px;" type="text"
                    @click="showNewEntityByTempletDialog = true" v-if="type == 'model'">以此实体类新建实体
@@ -85,7 +85,7 @@
     props: ['id', 'ajaxPath', 'type'],
     data() {
       return {
-        showNewTempletDialog: false,
+        showNewTempletByEntityDialog: false,
         showNewEntityByTempletDialog: false,
         treeId: '',
         treeName: '',
@@ -191,7 +191,7 @@
         this.inputTag = ''
       },
       closeModel() {
-        this.showNewTempletDialog = false
+        this.showNewTempletByEntityDialog = false
         this.showNewEntityByTempletDialog = false
       }
     }
