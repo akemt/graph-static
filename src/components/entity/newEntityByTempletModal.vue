@@ -66,7 +66,7 @@
       // },
       // 以模型新建实体，跳转到实体界面
       createEntityByTemplet() {
-        api.entitys_post({data: {name: this.entityForm.entityName}}).then((data) => {
+        api.entitys_post({data: {name: this.entityForm.entityName, id: this.id}}).then((data) => {
           const id = data.data.id
           const entityPostParams = {
             path: {id: id},
