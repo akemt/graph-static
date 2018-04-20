@@ -71,9 +71,11 @@
           const entityPostParams = {
             path: {id: id},
             data: {
-              name: this.entityForm.entityName,
-              mid: this.id,
-              define: JSON.stringify(this.tree)
+              json: JSON.stringify({
+                name: this.entityForm.entityName,
+                mid: this.id,
+                define: this.tree
+              })
             }
           }
           console.log('entityPostParams:', entityPostParams)

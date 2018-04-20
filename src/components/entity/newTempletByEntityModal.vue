@@ -54,8 +54,10 @@
           const modelsPostParams = {
             path: {id: id},
             data: {
-              name: this.templetForm.templetName,
-              define: JSON.stringify(this.templetTree)
+              json: JSON.stringify({
+                name: this.templetForm.templetName,
+                define: this.templetTree
+              })
             }
           }
           api.models_id_post(modelsPostParams).then((data) => {
@@ -69,7 +71,9 @@
               id: this.id
             },
             data: {
-              mid: id
+              json: JSON.stringify({
+                mid: id
+              })
             }
           })
         })
