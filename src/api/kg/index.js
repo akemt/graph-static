@@ -23,7 +23,7 @@ function user_login_post(opts) {
 function attributes_keys(opts) {
   return instance({
     method: 'get',
-    url: '/attributes/keys',
+    url: convertRESTAPI('/models/:mid/attributes/keys', opts),
     opts: opts
   })
 }
@@ -163,6 +163,15 @@ function entitys_get(opts) {
   })
 }
 
+/** 简历关系获得已有关系信息searchStr，10项 */
+function models_id_relations_get(opts) {
+  return instance({
+    method: 'get',
+    url: convertRESTAPI('/models/:mid/relations/keys', opts),
+    opts: opts
+  })
+}
+
 export {
   user_logout_get,
   user_login_post,
@@ -181,5 +190,6 @@ export {
   entitys_id_post,
   entitys_post,
   entitys_id_get,
-  entitys_get
+  entitys_get,
+  models_id_relations_get
 }

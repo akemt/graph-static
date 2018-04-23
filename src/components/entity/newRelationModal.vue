@@ -16,7 +16,24 @@
           </el-form-item>
           <el-form-item prop="relation">
             <span class="svg-container svg-container_login">关系</span>
-            <el-input name="relation" type="text" v-model="createRelationForm.relation" placeholder="请输入关系"/>
+            <el-select
+              name="relation"
+              v-model="createRelationForm.relation"
+              filterable
+              allow-create
+              remote
+              reserve-keyword
+              placeholder="请输入关系"
+              :remote-method="remoteMethod"
+              @blur="remote($event)"
+              @keyup.enter.native="remote($event)"
+              :loading="loading">
+              <el-option
+                v-for="item in searchResult"
+                :key="item.id"
+                :label="item.name"
+                :value="item.name"></el-option>
+            </el-select>
           </el-form-item>
         </el-form>
 
@@ -58,7 +75,8 @@
         createRelationRules: {
           ename: [{required: true, trigger: 'blur', validator: validateType}],
           relation: [{required: true, trigger: 'blur', validator: validateType}]
-        }
+        },
+        searchResult: []
       }
     },
     methods: {
@@ -83,6 +101,22 @@
       },
       close() {
         this.$emit('close')
+      },
+      remoteMethod(query) {
+        if (!Object.is(query, '')) {
+          this.loading = true
+          setTimeout(() => {
+            api.models_id_relations_get({params: {searchStr: query}}).then((data) => {
+              this.loading = false
+              this.searchResult = data.data
+            })
+          }, 200)
+        } else {
+          this.searchResult = []
+        }
+      },
+      remote(event) {
+        this.createRelationForm.relation = event.target.value
       }
     },
     components: {search}
