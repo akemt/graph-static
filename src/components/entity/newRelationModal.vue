@@ -17,6 +17,7 @@
           <el-form-item prop="relation">
             <span class="svg-container svg-container_login">关系</span>
             <el-select
+              style="width: 100%"
               name="relation"
               v-model="createRelationForm.relation"
               filterable
@@ -56,7 +57,7 @@
   import search from '@/components/search/index'
 
   export default {
-    props: ['open', 'item'],
+    props: ['open', 'item', 'mid'],
     data() {
       const validateType = (rule, value, callback) => {
         if (!isvalidUsername(value)) {
@@ -76,7 +77,8 @@
           ename: [{required: true, trigger: 'blur', validator: validateType}],
           relation: [{required: true, trigger: 'blur', validator: validateType}]
         },
-        searchResult: []
+        searchResult: [],
+        loading: false
       }
     },
     methods: {
@@ -106,7 +108,7 @@
         if (!Object.is(query, '')) {
           this.loading = true
           setTimeout(() => {
-            api.models_id_relations_get({params: {searchStr: query}}).then((data) => {
+            api.models_id_relations_get({path: {mid: this.mid}, params: {searchStr: query}}).then((data) => {
               this.loading = false
               this.searchResult = data.data
             })

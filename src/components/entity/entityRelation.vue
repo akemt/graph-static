@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <new-relation-modal :open.sync="showDialog" @close="closeModel()" :item="item"></new-relation-modal>
+    <new-relation-modal :open.sync="showDialog" @close="closeModel()" :item="item" :mid="mid"></new-relation-modal>
     <el-card class="box-card">
     <div>
       <el-button style="float: right; padding: 3px 0" type="text" @click="showDialog = true">新建关系</el-button>
@@ -45,7 +45,7 @@
   const api = require('@/api/kg/index')
 
   export default {
-    props: ['item'],
+    props: ['item', 'mid'],
     data() {
       return {
         showDialog: false,

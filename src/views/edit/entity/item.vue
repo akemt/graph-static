@@ -1,7 +1,10 @@
 <template>
   <div class="">
-    <entity-tree :id="this.$route.params.id" :ajaxPath="{init: 'entitys_id_get', save: 'entitys_id_post'}" :type="'entity'"></entity-tree>
-    <entity-relation :item="this.$route.params"></entity-relation>
+    <entity-tree :id="this.$route.params.id"
+                 :ajaxPath="{init: 'entitys_id_get', save: 'entitys_id_post'}"
+                 :type="'entity'"
+                 @getModel="getModel"></entity-tree>
+    <entity-relation :item="this.$route.params" :mid="modelId"></entity-relation>
   </div>
 </template>
 
@@ -10,7 +13,17 @@
   import entityRelation from '@/components/entity/entityRelation'
 
   export default {
-    components: {entityTree, entityRelation}
+    components: {entityTree, entityRelation},
+    data() {
+      return {
+        modelId: ''
+      }
+    },
+    methods: {
+      getModel(modelId) {
+        this.modelId = modelId
+      }
+    }
   }
 </script>
 

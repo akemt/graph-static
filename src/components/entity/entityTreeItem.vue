@@ -22,41 +22,52 @@
         <el-tag
           size="mini"
           :key="tag"
-          v-for="tag in data.value"
+          v-for="(tag, $index) in data.value"
           closable
           :disable-transitions="false"
-          @close="removeTag(tag, data.value)">
-          {{tagRender(tag)}}</el-tag>
+          @click.native="editExpression(tag, $index, data.id, $event)"
+          @close="removeTag(tag, data.value)">{{tagRender(tag)}}</el-tag>
         <el-input
           v-if="showInputId == data.id"
           v-model="inputTag"
           ref="saveTagInput"
           size="mini"
           @keyup.enter.native="inputTagConfirm(data.value)"
-          @blur="inputTagConfirm(data.value)"
-        ></el-input>
+          @blur="inputTagConfirm(data.value)"></el-input>
       </span>
       <span class="button-group">
         <el-button size="mini" @click="showInput(data.id, node)" v-if="type == 'entity'">+ 新增</el-button>
         <el-button type="text" size="mini" @click="appendNode(data)"
                    icon="el-icon-circle-plus-outline"></el-button>
+        <el-button class="new-expression" @click="showDialog = true">新建表达式</el-button>
         <el-button type="text" size="mini" @click="removeNode(node, data)"
                    icon="el-icon-circle-close-outline"></el-button>
       </span>
     </label>
+    <new-computed-expression :open.sync="showDialog"
+                             @close="closeModel()"
+                             :id="id" :mid="mid" :tag="tags"
+                             @refreshComputed="refreshComputed"></new-computed-expression>
   </div>
 </template>
 
 <script>
+  /* eslint-disable no-eval */
+
+  import newComputedExpression from './newComputedExpression'
+
   const api = require('@/api/index').kg
   export default {
-    props: ['data', 'node', 'type', 'mid'],
+    components: {newComputedExpression},
+    props: ['data', 'node', 'type', 'mid', 'id'],
     data() {
       return {
         showInputId: -1,
         searchResult: [],
         loading: false,
-        computeCache: {}
+        computeCache: {},
+        showDialog: false,
+        tags: null
       }
     },
     methods: {
@@ -67,7 +78,7 @@
         if (!Object.is(query, '')) {
           this.loading = true
           setTimeout(() => {
-            api.attributes_keys({params: {searchStr: query}}).then((data) => {
+            api.attributes_keys({path: {mid: this.mid}, params: {searchStr: query}}).then((data) => {
               this.loading = false
               this.searchResult = data.data
             })
@@ -107,7 +118,7 @@
           this.$refs.saveTagInput.$refs.input.focus()
         })
       },
-      tagRender(tag) {
+      tagRender: function(tag) {
         const _vm = this
         const regBrace = /([^\{\}]+)(?=\})/g
         const regSquare = /\[(.+?)\]/g
@@ -144,6 +155,23 @@
           return eval(expression)
         }
         return tag
+      },
+      closeModel() {
+        this.showDialog = false
+      },
+      editExpression(tag, index, id, event) {
+        console.log()
+        this.tags = {
+          tag: tag,
+          index: index,
+          id: id
+        }
+        this.showDialog = true
+      },
+      refreshComputed(value) {
+        this.tags.tag = value
+        console.log('--saveComputedExpression--', value)
+        this.$emit('saveComputedExpression', value, this.tags)
       }
     }
   }

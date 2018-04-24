@@ -5,10 +5,11 @@
   }
 }
 
-.tree-slot-node {
+.tree-slot-node label {
   .button-group {
     display: none;
     margin-left: 10px;
+    position: relative;
     button.el-button--text {
       margin-left: 10px;
       font-size: 14px;
@@ -19,17 +20,30 @@
       padding: 3px 10px;
       padding-bottom: 4px;
     }
+
+    .new-expression {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 25px;
+    }
+
+    &:hover {
+      .new-expression {
+        display: block;
+      }
+    }
   }
   div.el-input {
     width: unset;
     input {
-      height: 20px;
+      height: 20px !important;
       border: none;
       width: unset;
     }
   }
 
-  & > label > span {
+  & > span {
     font-size: 12px;
   }
 

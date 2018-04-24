@@ -6,6 +6,7 @@
                                  :id="id"  :tree="tree"></new-entity-by-templet-modal>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
+        {{tree}}
         <span v-if="type == 'entity'&&modelName.length>0" size="small" style="width: auto;">[{{modelName}}]</span>
         <el-input v-model="treeName" size="small" style="width: 60%;"></el-input>
         <el-button style="float: right; padding: 8px 0" type="text" @click="saveTree">保存</el-button>
@@ -22,7 +23,7 @@
         :data="tree"
         :props="defaultProps">
         <span class="tree-slot-node" slot-scope="{ node, data }">
-          <tree-item :data="data" :node="node" :type="type" :mid="modelId"></tree-item>
+          <tree-item :data="data" :node="node" :type="type" :mid="modelId" :id="id" @saveComputedExpression="saveComputedExpression"></tree-item>
         </span>
       </el-tree>
       <el-button size="mini" icon="el-icon-plus" @click="appendRootNode">增加根节点</el-button>
@@ -77,6 +78,7 @@
           if (Object.is(_vm.type, 'model')) {
             _vm.modelId = data.data.id
           }
+          _vm.$emit('getModel', _vm.modelId)
         })
       },
       saveTree() {
@@ -102,6 +104,12 @@
       closeModel() {
         this.showNewTempletByEntityDialog = false
         this.showNewEntityByTempletDialog = false
+      },
+      saveComputedExpression(value, tags) {
+        console.log('saveComputedExpression')
+        console.log(value)
+        console.log(tags)
+        console.log(this.tree)
       }
     }
   }

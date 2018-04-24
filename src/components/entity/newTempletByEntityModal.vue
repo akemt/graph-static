@@ -66,16 +66,16 @@
             this.$router.push({name: 'model.item', params: {id: id}})
           })
           console.log('this.id', this.id)
-          api.entitys_id_post({
-            path: {
-              id: this.id
-            },
-            data: {
-              json: JSON.stringify({
-                mid: id
-              })
-            }
-          })
+          // api.entitys_id_post({
+          // path: {
+          // id: this.id
+          // },
+          // data: {
+          // json: JSON.stringify({
+          // mid: id
+          // })
+          // }
+          // })
         })
       },
       ok() {
