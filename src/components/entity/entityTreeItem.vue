@@ -25,7 +25,7 @@
           v-for="(tag, $index) in data.value"
           closable
           :disable-transitions="false"
-          @click.native="editExpression(tag, $index, data.id, $event)"
+          @click.native.stop="editExpression(tag, $index, data.id, $event)"
           @close="removeTag(tag, data.value)">{{tagRender(tag)}}</el-tag>
         <el-input
           v-if="showInputId == data.id"
@@ -46,8 +46,7 @@
     </label>
     <new-computed-expression :open.sync="showDialog"
                              @close="closeModel()"
-                             :id="id" :mid="mid" :tag="tags"
-                             @refreshComputed="refreshComputed"></new-computed-expression>
+                             :id="id" :mid="mid" :tag="tags" :item.sync="data.value"></new-computed-expression>
   </div>
 </template>
 
@@ -67,7 +66,15 @@
         loading: false,
         computeCache: {},
         showDialog: false,
-        tags: null
+        tags: null,
+        item: null
+      }
+    },
+    watch: {
+      'item': {
+        handler(val, oldVal) {
+          console.log('item-watch')
+        }
       }
     },
     methods: {
@@ -147,9 +154,9 @@
             const id = replaceStrs[reg].match(regBrace)
             const index = replaceStrs[reg].match(regParenthesis)
             if (!expression.length) {
-              expression = tag.replace(replaceStrs[reg], _vm.computeCache[id][index])
+              expression = tag.replace(replaceStrs[reg], _vm.computeCache[id[0]].value[index[0]])
             } else {
-              expression = expression.replace(replaceStrs[reg], _vm.computeCache[id][index])
+              expression = expression.replace(replaceStrs[reg], _vm.computeCache[id].value[index])
             }
           }
           return eval(expression)
@@ -157,21 +164,16 @@
         return tag
       },
       closeModel() {
+        this.$emit('update:data', this.data)
         this.showDialog = false
       },
       editExpression(tag, index, id, event) {
-        console.log()
         this.tags = {
           tag: tag,
           index: index,
           id: id
         }
         this.showDialog = true
-      },
-      refreshComputed(value) {
-        this.tags.tag = value
-        console.log('--saveComputedExpression--', value)
-        this.$emit('saveComputedExpression', value, this.tags)
       }
     }
   }

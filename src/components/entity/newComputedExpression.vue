@@ -35,6 +35,7 @@
               :key="tag"
               v-for="(tag, $index) in data.value"
               :disable-transitions="false"
+              v-if="tag.substr(0, 1) != '$'"
               @click.native="getTag(tag, $index, data.id)">{{tag}}</el-tag>
           </span>
         </span>
@@ -55,7 +56,7 @@
 
   export default {
     components: {search, entityTree},
-    props: ['open', 'id', 'mid', 'tag'],
+    props: ['open', 'id', 'mid', 'tag', 'item'],
     data() {
       return {
         tid: null,
@@ -108,7 +109,8 @@
       ok() {
         this.$refs.ruleForm.validate(valid => {
           if (valid) {
-            this.$emit('refreshComputed', '$(' + this.form.submitValue + ')')
+            this.item[this.tag.index] = '$(' + this.form.submitValue + ')'
+            this.$emit('update:item', this.item)
             this.close()
           } else {
             // 提示
