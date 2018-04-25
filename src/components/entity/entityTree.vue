@@ -55,6 +55,11 @@
         inputTag: ''
       }
     },
+    watch: {
+      'id': function() {
+        this.initAjax()
+      }
+    },
     mounted() {
       this.init()
     },
@@ -62,9 +67,6 @@
       init() {
         const _vm = this
         _vm.initAjax()
-        _vm.$watch('id', () => {
-          _vm.initAjax()
-        })
       },
       initAjax() {
         const _vm = this

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="open" :close-on-click-modal="false" center style="cursor: default">
+  <el-dialog :visible.sync="open" :close-on-click-modal="false" center style="cursor: default" @open="init">
     <el-row style="margin-bottom: 10px">
       <el-input readOnly v-model="readValue" size="small">
         <template slot="prepend">单项表达式</template>
@@ -81,7 +81,6 @@
       if (this.tag) {
         this.readValue = '[{' + this.tag.id + '}' + '(' + this.tag.index + ')]'
       }
-      this.init()
     },
     methods: {
       init() {

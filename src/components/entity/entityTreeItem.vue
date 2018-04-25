@@ -70,22 +70,19 @@
         item: null
       }
     },
-    watch: {
-      'item': {
-        handler(val, oldVal) {
-          console.log('item-watch')
-        }
-      }
-    },
     methods: {
       remote(data, event) {
         data.name = event.target.value
       },
       remoteMethod(query) {
+        let mid = this.mid
         if (!Object.is(query, '')) {
           this.loading = true
           setTimeout(() => {
-            api.attributes_keys({path: {mid: this.mid}, params: {searchStr: query}}).then((data) => {
+            if (Object.is(this.type, 'model')) {
+              mid = 'null'
+            }
+            api.attributes_keys({path: {mid: mid}, params: {searchStr: query}}).then((data) => {
               this.loading = false
               this.searchResult = data.data
             })
